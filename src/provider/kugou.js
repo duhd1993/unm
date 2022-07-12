@@ -32,7 +32,9 @@ const search = (info) => {
 		.then((response) => response.json())
 		.then((jsonBody) => {
 			// const list = jsonBody.data.lists.map(format)
-			const list = jsonBody.data.info.map(song => song.group.map(format)).flat();
+			const list = jsonBody.data.info
+				.map((song) => song.group.map(format))
+				.flat();
 			const matched = select(list, info);
 			return matched ? matched : Promise.reject();
 		})
@@ -50,13 +52,13 @@ const single = (song) => {
 	return request('GET', url)
 		.then((response) => response.json())
 		.then((jsonBody) => {
-                        return jsonBody.data.play_url || Promise.reject();
-                    })
+			return jsonBody.data.play_url || Promise.reject();
+		});
 };
 
 const track = (song) =>
-                single(song)
-		.then(resp => resp || Promise.reject())
+	single(song)
+		.then((resp) => resp || Promise.reject())
 		.catch(() => insure().kugou.track(song));
 
 const cs = getManagedCacheStorage('provider/kugou');
